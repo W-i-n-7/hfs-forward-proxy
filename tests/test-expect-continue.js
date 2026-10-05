@@ -1,0 +1,5 @@
+const http=require('http'),net=require('net');const p=require(require('path').resolve(process.env.PLUGIN || './plugin.js'))
+const srv=http.createServer((q,s)=>s.end('HFS'));srv.on('checkContinue',(q,s)=>{s.writeContinue();srv.emit('request',q,s)})
+;(async()=>{await p.init({getConfig:()=>({users:[{username:'u',password:'p'}],allowOtherPorts:true,portListIsWhitelist:false,allowLanIpAccess:true}),log:()=>{},onServer:cb=>cb(srv)})
+http.createServer((q,s)=>{let b='';q.on('data',d=>b+=d);q.on('end',()=>s.end('T body='+b))}).listen(9301)
+srv.listen(8103,()=>{const c=net.connect(8103,'127.0.0.1',()=>c.write(`POST http://127.0.0.1:9301/ HTTP/1.1\r\nHost: x\r\nProxy-Authorization: Basic ${Buffer.from('u:p').toString('base64')}\r\nExpect: 100-continue\r\nContent-Length: 2\r\nConnection: close\r\n\r\n`));let o='';c.on('data',d=>{o+=d;if(o.includes('100 Continue')&&!c.sent){c.sent=1;c.write('hi')}});c.on('close',()=>{console.log(JSON.stringify(o));process.exit()})})})()
