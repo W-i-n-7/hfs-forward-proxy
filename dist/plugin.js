@@ -16,8 +16,11 @@ const crypto = require("crypto")
 
 exports.repo = "W-i-n-7/hfs-forward-proxy"
 exports.description = "Authenticated HTTP, HTTPS CONNECT, and WebSocket forward proxy for HFS (This plugin is AI generated!)"
-exports.version = 1
+exports.version = 1.01
 exports.apiRequired = 13.4
+exports.changelog = [
+    { "version": 1.01, "message": "Options UI fix" }
+]
 
 exports.config = {
   users: {
@@ -25,7 +28,7 @@ exports.config = {
     label: "Proxy users",
     fields: {
       username: { label: "Username", required: true, $width: 1 },
-      password: { label: "Password", required: true, inputProps: { type: "password" }, $width: 1 },
+      password: { label: "Password", required: true, inputProps: { type: "password" }, $hideUnder: true },
     },
   },
   allowLanIpAccess: {
